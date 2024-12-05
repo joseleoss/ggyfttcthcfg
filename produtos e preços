@@ -1,0 +1,57 @@
+class FormaPagamento: 
+    def __init__(self, metodo, desconto=0, taxa_adicional=0): 
+        self.metodo = metodo
+        self.desconto = desconto  # Porcentagem de desconto
+        self.taxa_adicional = taxa_adicional  # Porcentagem de taxa adicional
+
+    def calcular_valor_final(self, valor): 
+        """Calcula o valor final com base no desconto ou taxa adicional."""
+        if self.desconto > 0: 
+            valor -= valor * (self.desconto / 100)
+        elif self.taxa_adicional > 0: 
+            valor += valor * (self.taxa_adicional / 100)
+        return valor
+
+    def __str__(self): 
+        detalhes = f"Método:  {self.metodo}"
+        if self.desconto > 0: 
+            detalhes += f" | Desconto:  {self.desconto}%"
+        if self.taxa_adicional > 0: 
+            detalhes += f" | Taxa adicional:  {self.taxa_adicional}%"
+        return detalhes
+
+
+# Lista de formas de pagamento disponiches
+formas_pagamento = [
+    FormaPagamento("Cartão de Crédito", taxa_adicional=5),   # Taxa de 5%
+    FormaPagamento("Cartão de Débito"), 
+    FormaPagamento("Boleto Bancário", desconto=10),   # 10% de desconto
+    FormaPagamento("Pix", desconto=15),   # 15% de desconto
+    FormaPagamento("Pagamento na Entrega", taxa_adicional=2),   # Taxa de 2%
+]
+
+def exibir_formas_pagamento(): 
+    """Exibe as formas de pagamento disponiveis."""
+    print("Formas de pagamento disponiveis: ")
+    for i, forma in enumerate(formas_pagamento, 1): 
+        print(f"{i}. {forma}")
+
+def processar_pagamento(valor_total): 
+    """Simula o processo de pagamento."""
+    exibir_formas_pagamento()
+    escolha = int(input("Escolha a forma de pagamento (número):  ")) - 1
+
+    if 0 <= escolha < len(formas_pagamento): 
+        forma_escolhida = formas_pagamento[escolha]
+        valor_final = forma_escolhida.calcular_valor_final(valor_total)
+        print(f"\nForma escolhida:  {forma_escolhida.metodo}")
+        print(f"Valor original:  R${valor_total: .2f}")
+        print(f"Valor final com ajustes:  R${valor_final: .2f}")
+    else: 
+        print("Opção inválida! Tente novamente.")
+
+# Demonstração
+if __name__ == "__main__": 
+    print("Bem-vindo à loja de suplementos online!")
+    valor_compra = float(input("Digite o valor total da sua compra:  R$ "))
+    processar_pagamento(valor_compra)
